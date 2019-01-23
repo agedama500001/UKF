@@ -50,6 +50,7 @@ int main() {
       auto s = hasData(string(data));
 
       if (s != "") {
+        std::cout << s << std::endl;
         auto j = json::parse(s);
 
         string event = j[0].get<string>();
@@ -66,6 +67,7 @@ int main() {
           // reads first element from the current line
           string sensor_type;
           iss >> sensor_type;
+
 
           if (sensor_type.compare("L") == 0) {
             meas_package.sensor_type_ = MeasurementPackage::LASER;
@@ -129,8 +131,9 @@ int main() {
           estimate(3) = v2;
         
           estimations.push_back(estimate);
-
+          printf("CalculateRMSE->");
           VectorXd RMSE = tools.CalculateRMSE(estimations, ground_truth);
+          printf("Success\n");
 
           json msgJson;
           msgJson["estimate_x"] = p_x;
@@ -142,6 +145,7 @@ int main() {
           auto msg = "42[\"estimate_marker\"," + msgJson.dump() + "]";
           //std::cout << msg << std::endl;
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
+          printf("end telemety if\n");
 
         }  // end "telemetry" if
 
